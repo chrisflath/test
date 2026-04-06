@@ -1,4 +1,5 @@
 import { useGameStore } from '../../stores/gameStore';
+import { useAchievementStore } from '../../stores/achievementStore';
 import { useI18n } from '../../i18n';
 import type { ExplorerData, ExplorerMove } from '../../types/chess';
 
@@ -53,6 +54,7 @@ function MoveRow({ move }: { move: ExplorerMove }) {
     const to = move.uci.slice(2, 4);
     const promotion = move.uci.length > 4 ? move.uci[4] : undefined;
     makeMove(from, to, promotion);
+    useAchievementStore.getState().incrementStat('explorerMovesClicked');
   };
 
   return (

@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
+import { useAchievementStore } from '../../stores/achievementStore';
 import { useI18n } from '../../i18n';
+import { XpBadge } from '../achievements/XpBadge';
 import type { Locale } from '../../i18n';
 
-export function Toolbar() {
+interface ToolbarProps {
+  onShowTrophies?: () => void;
+}
+
+export function Toolbar({ onShowTrophies }: ToolbarProps) {
   const { loadPgn, reset } = useGameStore();
+  const { incrementStat } = useAchievementStore();
   const { t, locale, setLocale } = useI18n();
   const [showPgnInput, setShowPgnInput] = useState(false);
   const [pgnText, setPgnText] = useState('');
@@ -12,6 +19,8 @@ export function Toolbar() {
   const handleLoadPgn = () => {
     if (pgnText.trim()) {
       loadPgn(pgnText.trim());
+      incrementStat('pgnsLoaded');
+      incrementStat('gamesStudied');
       setPgnText('');
       setShowPgnInput(false);
     }
@@ -26,10 +35,13 @@ export function Toolbar() {
   return (
     <div className="bg-[var(--color-surface)] border-b border-[var(--color-border)]">
       <div className="flex items-center justify-between px-4 py-2 flex-wrap gap-2">
-        {/* App title */}
-        <h1 className="text-xl font-bold text-[var(--color-accent)] tracking-tight">
-          ♔ ChessBase Clone
-        </h1>
+        {/* App title + XP badge */}
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-bold text-[var(--color-accent)] tracking-tight">
+            ♔ ChessBase Clone
+          </h1>
+          <XpBadge onClick={onShowTrophies} />
+        </div>
 
         {/* Actions */}
         <div className="flex items-center gap-2 flex-wrap">
@@ -67,8 +79,8 @@ export function Toolbar() {
             className="px-3 py-2 text-base bg-[var(--color-surface-2)] text-[var(--color-text)]
                        rounded-lg border border-[var(--color-border)] cursor-pointer"
           >
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="en">🇬🇧 English</option>
+            <option value="de">DE</option>
+            <option value="en">EN</option>
           </select>
         </div>
       </div>
@@ -79,7 +91,7 @@ export function Toolbar() {
           <textarea
             value={pgnText}
             onChange={(e) => setPgnText(e.target.value)}
-            placeholder="PGN hier einfügen... / Paste PGN here..."
+            placeholder="PGN hier einfuegen... / Paste PGN here..."
             className="w-full h-40 p-3 text-base font-mono bg-[var(--color-bg)]
                        text-[var(--color-text)] rounded-lg border border-[var(--color-border)]
                        resize-y"

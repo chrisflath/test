@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../stores/gameStore';
+import { useAchievementStore } from '../../stores/achievementStore';
 import { useOpeningExplorer } from '../../hooks/useOpeningExplorer';
 import { useI18n } from '../../i18n';
 import { MoveTable } from './MoveTable';
@@ -13,9 +14,18 @@ export function OpeningExplorer() {
   const { data, loading, error, database, setDatabase } = useOpeningExplorer(fen);
   const { t, locale } = useI18n();
   const [activeTab, setActiveTab] = useState<Tab>('moves');
+  const lastEcoRef = useRef('');
 
   const eco = data?.opening?.eco || '';
   const openingName = data?.opening?.name || '';
+
+  // Track openings explored for achievements
+  useEffect(() => {
+    if (eco && eco !== lastEcoRef.current) {
+      lastEcoRef.current = eco;
+      useAchievementStore.getState().addOpeningExplored(eco);
+    }
+  }, [eco]);
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: 'moves', label: locale === 'de' ? 'Zuege' : 'Moves', icon: '♟' },

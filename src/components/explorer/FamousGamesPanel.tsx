@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
+import { useAchievementStore } from '../../stores/achievementStore';
 import { useI18n } from '../../i18n';
 import { findFamousGamesByEco, findFamousGamesByOpening, famousGames as allFamousGames, type FamousGame } from '../../data/famousGames';
 
@@ -19,6 +20,10 @@ function GameCard({ game }: { game: FamousGame }) {
 
   const handleLoad = () => {
     loadPgn(game.pgn);
+    // Track for achievements
+    const gameId = `${game.white}-${game.black}-${game.year}`;
+    useAchievementStore.getState().addFamousGameLoaded(gameId);
+    useAchievementStore.getState().incrementStat('gamesStudied');
   };
 
   const resultColor =

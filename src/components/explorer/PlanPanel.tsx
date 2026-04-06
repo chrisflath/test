@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { useI18n } from '../../i18n';
+import { useAchievementStore } from '../../stores/achievementStore';
 import { findPlansForEco, findPlansByName } from '../../data/openingPlans';
 
 interface PlanPanelProps {
@@ -9,6 +11,15 @@ interface PlanPanelProps {
 export function PlanPanel({ eco, openingName }: PlanPanelProps) {
   const { locale } = useI18n();
   const plan = findPlansForEco(eco) || findPlansByName(openingName);
+  const trackedRef = useRef('');
+
+  // Track plans viewed
+  useEffect(() => {
+    if (plan && plan.eco !== trackedRef.current) {
+      trackedRef.current = plan.eco;
+      useAchievementStore.getState().incrementStat('plansViewed');
+    }
+  }, [plan]);
 
   if (!plan) {
     return (

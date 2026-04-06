@@ -3,6 +3,7 @@ import { Chess } from '@jackstenglein/chess';
 import type { Move } from '@jackstenglein/chess';
 import type { Square } from '@jackstenglein/chess';
 import type { Key } from 'chessground/types';
+import { useAchievementStore } from './achievementStore';
 
 export interface GameState {
   chess: Chess;
@@ -54,6 +55,8 @@ export const useGameStore = create<GameState>((set, get) => ({
         currentMove: move,
         fen: move.fen,
       });
+      // Track achievement stats
+      useAchievementStore.getState().incrementStat('movesPlayed');
       return true;
     }
     return false;
@@ -121,6 +124,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => ({
       orientation: state.orientation === 'white' ? 'black' : 'white',
     }));
+    useAchievementStore.getState().incrementStat('boardFlips');
   },
 
   reset: () => {
