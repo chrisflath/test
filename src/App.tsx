@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { Toolbar } from './components/layout/Toolbar';
 import { AnalysisPage } from './pages/AnalysisPage';
 import { TrainingPage } from './pages/TrainingPage';
+import { EvalTrainerPage } from './pages/EvalTrainerPage';
 import { TrophyCase } from './components/achievements/TrophyCase';
 import { AchievementToast } from './components/achievements/AchievementToast';
 import { useAchievementStore } from './stores/achievementStore';
 import { useI18n } from './i18n';
 
-type View = 'analysis' | 'training' | 'trophies';
+type View = 'analysis' | 'training' | 'evaluate' | 'trophies';
 
 function NavTabs({ view, setView }: { view: View; setView: (v: View) => void }) {
   const { locale } = useI18n();
@@ -15,6 +16,7 @@ function NavTabs({ view, setView }: { view: View; setView: (v: View) => void }) 
   const tabs: { key: View; icon: string; de: string; en: string }[] = [
     { key: 'analysis', icon: '♟', de: 'Analyse', en: 'Analysis' },
     { key: 'training', icon: '🧠', de: 'Training', en: 'Training' },
+    { key: 'evaluate', icon: '⚖', de: 'Bewertung', en: 'Evaluate' },
     { key: 'trophies', icon: '🏆', de: 'Erfolge', en: 'Trophies' },
   ];
 
@@ -24,7 +26,7 @@ function NavTabs({ view, setView }: { view: View; setView: (v: View) => void }) 
         <button
           key={tab.key}
           onClick={() => setView(tab.key)}
-          className={`flex-1 py-3 text-base font-medium flex items-center justify-center gap-2
+          className={`flex-1 py-3 text-sm sm:text-base font-medium flex items-center justify-center gap-1 sm:gap-2
                      transition-colors touch-manipulation cursor-pointer
             ${view === tab.key
               ? 'text-[var(--color-accent)] border-b-2 border-[var(--color-accent)]'
@@ -32,7 +34,7 @@ function NavTabs({ view, setView }: { view: View; setView: (v: View) => void }) 
             }`}
         >
           <span className="text-lg">{tab.icon}</span>
-          <span>{locale === 'de' ? tab.de : tab.en}</span>
+          <span className="hidden sm:inline">{locale === 'de' ? tab.de : tab.en}</span>
         </button>
       ))}
     </div>
@@ -62,6 +64,7 @@ function App() {
       <div className="flex-1 overflow-y-auto">
         {view === 'analysis' && <AnalysisPage />}
         {view === 'training' && <TrainingPage />}
+        {view === 'evaluate' && <EvalTrainerPage />}
         {view === 'trophies' && <TrophyCase />}
       </div>
 
