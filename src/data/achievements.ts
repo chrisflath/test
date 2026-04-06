@@ -51,6 +51,9 @@ export interface PlayerStats {
   differentOpeningsPlayed: number;
   pgnsLoaded: number;
   boardFlips: number;
+  trainingQuestionsCorrect: number;
+  trainingQuestionsAttempted: number;
+  trainingSessionsCompleted: number;
 }
 
 export const defaultStats: PlayerStats = {
@@ -68,6 +71,9 @@ export const defaultStats: PlayerStats = {
   differentOpeningsPlayed: 0,
   pgnsLoaded: 0,
   boardFlips: 0,
+  trainingQuestionsCorrect: 0,
+  trainingQuestionsAttempted: 0,
+  trainingSessionsCompleted: 0,
 };
 
 // =====================================================
@@ -380,6 +386,68 @@ export const achievements: AchievementDef[] = [
     description_en: 'Load 10 different PGN games',
     requirement: (s) => s.pgnsLoaded >= 10,
     xp: 30,
+  },
+
+  // ===== TRAINING ACHIEVEMENTS =====
+  {
+    id: 'training_first',
+    icon: '🧩',
+    tier: 'bronze',
+    category: 'mastery',
+    name_de: 'Erste Lektion',
+    name_en: 'First Lesson',
+    description_de: 'Beantworte deine erste strategische Frage',
+    description_en: 'Answer your first strategic question',
+    requirement: (s) => s.trainingQuestionsAttempted >= 1,
+    xp: 10,
+  },
+  {
+    id: 'training_streak_5',
+    icon: '🎯',
+    tier: 'bronze',
+    category: 'mastery',
+    name_de: 'Treffsicher',
+    name_en: 'Sharpshooter',
+    description_de: '5 strategische Fragen richtig beantwortet',
+    description_en: '5 strategic questions answered correctly',
+    requirement: (s) => s.trainingQuestionsCorrect >= 5,
+    xp: 25,
+  },
+  {
+    id: 'training_expert',
+    icon: '🧠',
+    tier: 'silver',
+    category: 'mastery',
+    name_de: 'Strategieexperte',
+    name_en: 'Strategy Expert',
+    description_de: '25 strategische Fragen richtig beantwortet',
+    description_en: '25 strategic questions answered correctly',
+    requirement: (s) => s.trainingQuestionsCorrect >= 25,
+    xp: 100,
+  },
+  {
+    id: 'training_session_complete',
+    icon: '✅',
+    tier: 'bronze',
+    category: 'mastery',
+    name_de: 'Durchhalter',
+    name_en: 'Finisher',
+    description_de: 'Schliesse deine erste Trainingseinheit ab',
+    description_en: 'Complete your first training session',
+    requirement: (s) => s.trainingSessionsCompleted >= 1,
+    xp: 15,
+  },
+  {
+    id: 'training_5_sessions',
+    icon: '💪',
+    tier: 'silver',
+    category: 'mastery',
+    name_de: 'Trainingsprofi',
+    name_en: 'Training Pro',
+    description_de: '5 Trainingseinheiten abgeschlossen',
+    description_en: '5 training sessions completed',
+    requirement: (s) => s.trainingSessionsCompleted >= 5,
+    xp: 75,
   },
 ];
 
