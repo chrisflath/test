@@ -4,7 +4,10 @@ import { BoardControls } from '../components/board/BoardControls';
 import { MoveList } from '../components/notation/MoveList';
 import { GameHeaders } from '../components/headers/GameHeaders';
 import { OpeningExplorer } from '../components/explorer/OpeningExplorer';
+import { EnginePanel } from '../components/engine/EnginePanel';
+import { EvalBar } from '../components/engine/EvalBar';
 import { useGameStore } from '../stores/gameStore';
+import { useEngineStore } from '../stores/engineStore';
 
 /** Sample game to show on first load */
 const SAMPLE_PGN = `[Event "Schachweltmeisterschaft"]
@@ -27,7 +30,8 @@ fxe6 20. e4 d4 21. f4 Qe7 22. e5 Rb8 23. Bc4 Kh8 24. Qh3 Nf8 25. b3 a5
 38. Rxf6 gxf6 39. Rxf6 Kg8 40. Bc4 Kh8 41. Qf4 1-0`;
 
 export function AnalysisPage() {
-  const { loadPgn, goForward, goBack, goToStart, goToEnd } = useGameStore();
+  const { loadPgn, goForward, goBack, goToStart, goToEnd, fen } = useGameStore();
+  const evaluate = useEngineStore((s) => s.evaluate);
 
   // Load sample game on mount
   useEffect(() => {
@@ -36,6 +40,11 @@ export function AnalysisPage() {
       loadPgn(SAMPLE_PGN);
     }
   }, [loadPgn]);
+
+  // Auto-evaluate when position changes
+  useEffect(() => {
+    evaluate(fen);
+  }, [fen, evaluate]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -70,15 +79,23 @@ export function AnalysisPage() {
   return (
     <div className="flex-1 p-2 md:p-4 overflow-y-auto">
       <div className="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
-        {/* Left: Board */}
+        {/* Left: Eval bar + Board */}
         <div className="flex-shrink-0 lg:w-[45%]">
-          <ChessBoard />
+          <div className="flex gap-2">
+            <EvalBar />
+            <div className="flex-1">
+              <ChessBoard />
+            </div>
+          </div>
           <BoardControls />
         </div>
 
         {/* Right: Info panels stacked */}
         <div className="flex-1 min-w-0 flex flex-col gap-3">
           <GameHeaders />
+
+          {/* Engine panel */}
+          <EnginePanel />
 
           {/* Moves panel */}
           <div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] overflow-hidden">
