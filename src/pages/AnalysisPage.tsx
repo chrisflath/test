@@ -3,6 +3,7 @@ import { ChessBoard } from '../components/board/ChessBoard';
 import { BoardControls } from '../components/board/BoardControls';
 import { MoveList } from '../components/notation/MoveList';
 import { GameHeaders } from '../components/headers/GameHeaders';
+import { OpeningExplorer } from '../components/explorer/OpeningExplorer';
 import { useGameStore } from '../stores/gameStore';
 
 /** Sample game to show on first load */
@@ -67,21 +68,25 @@ export function AnalysisPage() {
   }, [goForward, goBack, goToStart, goToEnd]);
 
   return (
-    <div className="flex-1 p-2 md:p-4">
-      {/* Responsive layout: stacked on mobile/tablet, side-by-side on desktop */}
+    <div className="flex-1 p-2 md:p-4 overflow-y-auto">
       <div className="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
-        {/* Board section */}
-        <div className="flex-shrink-0 lg:w-[55%]">
+        {/* Left: Board */}
+        <div className="flex-shrink-0 lg:w-[45%]">
           <ChessBoard />
           <BoardControls />
         </div>
 
-        {/* Info panel */}
-        <div className="flex-1 min-w-0">
+        {/* Right: Info panels stacked */}
+        <div className="flex-1 min-w-0 flex flex-col gap-3">
           <GameHeaders />
+
+          {/* Moves panel */}
           <div className="bg-[var(--color-surface)] rounded-lg border border-[var(--color-border)] overflow-hidden">
             <MoveList />
           </div>
+
+          {/* Opening Explorer with plans & famous games */}
+          <OpeningExplorer />
         </div>
       </div>
     </div>
