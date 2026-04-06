@@ -202,11 +202,9 @@ function TrainingBoard({
   }, [interactive, onSquareClick]);
 
   return (
-    <div
-      ref={boardRef}
-      className="aspect-square w-full max-w-[min(60vh,500px)]"
-      style={{ minWidth: '280px' }}
-    />
+    <div className="w-full max-w-[min(60vh,500px)]" style={{ minWidth: '280px' }}>
+      <div ref={boardRef} className="board-container" />
+    </div>
   );
 }
 

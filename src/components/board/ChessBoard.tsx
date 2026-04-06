@@ -38,11 +38,9 @@ export function ChessBoard() {
 
   return (
     <div className="flex flex-col items-center">
-      <div
-        ref={boardRef}
-        className="aspect-square w-full max-w-[min(70vh,600px)]"
-        style={{ minWidth: '320px' }}
-      />
+      <div className="w-full max-w-[min(70vh,600px)]" style={{ minWidth: '320px' }}>
+        <div ref={boardRef} className="board-container" />
+      </div>
     </div>
   );
 }

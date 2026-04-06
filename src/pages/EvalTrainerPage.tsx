@@ -35,7 +35,9 @@ function StaticBoard({ fen }: { fen: string }) {
   useEffect(() => { apiRef.current?.set({ fen }); }, [fen]);
 
   return (
-    <div ref={boardRef} className="aspect-square w-full max-w-[min(55vh,480px)]" style={{ minWidth: '260px' }} />
+    <div className="w-full max-w-[min(55vh,480px)]" style={{ minWidth: '260px' }}>
+      <div ref={boardRef} className="board-container" />
+    </div>
   );
 }
 
